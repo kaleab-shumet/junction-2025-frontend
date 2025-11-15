@@ -119,7 +119,7 @@ export default function DeliveryDashboard() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pb-[10dvh]">
       <div className="relative">
         <Navbar />
         <Header
