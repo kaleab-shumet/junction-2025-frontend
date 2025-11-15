@@ -13,16 +13,20 @@ import AlternativeSelection from "./components/customer/AlternativeSelection";
 import ConfirmationScreen from "./components/customer/ConfirmationScreen";
 import ViewSwitcher from "./components/shared/ViewSwitcher";
 import Home from "./pages/Home";
+import Demo from "./pages/Demo";
 
 function App() {
   return (
     <AppProvider>
       <Router>
-        <div className="min-h-screen">
+        <div className="min-h-screen bg-zinc-300">
           <ViewSwitcher />
           <Routes>
             {/* home */}
             <Route path="/home" element={<Home />} />
+
+            {/* demo */}
+            <Route path="/demo" element={<Demo />} />
 
             {/* Delivery Routes */}
             <Route path="/delivery" element={<DeliveryDashboard />} />

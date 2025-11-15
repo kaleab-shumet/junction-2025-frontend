@@ -106,7 +106,7 @@ export default function AlternativeSelection() {
           </div>
         )}
 
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6">
+        <div className="bg-zinc-100 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6">
           <label className="block text-lg font-semibold text-gray-900 mb-4">
             🔍 Search for alternatives
           </label>
@@ -231,7 +231,7 @@ export default function AlternativeSelection() {
         </div>
 
         {filteredAlternatives.length === 0 && (
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-12">
+          <div className="bg-zinc-200 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-12">
             <div className="text-center">
               <svg
                 className="w-16 h-16 text-gray-400 mx-auto mb-4"
@@ -256,7 +256,7 @@ export default function AlternativeSelection() {
           </div>
         )}
 
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6">
+        <div className="bg-zinc-200 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6">
           <Button
             onClick={handleSendChoice}
             disabled={!selectedAlternative}

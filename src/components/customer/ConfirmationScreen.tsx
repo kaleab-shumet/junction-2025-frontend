@@ -92,13 +92,13 @@ export default function ConfirmationScreen() {
     : null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-zinc-100">
       <Navbar />
 
       <Header title="Confirm Your Choice" />
 
       <div className="p-4 space-y-4">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div className="bg-zinc-100 rounded-lg shadow-sm border border-gray-200 p-4">
           <h2 className="text-lg font-semibold text-gray-900 mb-2">
             Order Summary
           </h2>
@@ -107,7 +107,7 @@ export default function ConfirmationScreen() {
         </div>
 
         <div
-          className={`bg-white rounded-lg shadow-sm border-2 p-4 ${
+          className={`bg-zinc-100 rounded-lg shadow-sm border-2 p-4 ${
             action === "replace" ? "border-blue-200" : "border-red-200"
           }`}
         >
@@ -195,7 +195,7 @@ export default function ConfirmationScreen() {
           )}
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div className="bg-zinc-100 rounded-lg shadow-sm border border-gray-200 p-4">
           <Button
             onClick={handleSendToDelivery}
             disabled={isSubmitting}

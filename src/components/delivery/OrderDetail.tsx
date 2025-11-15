@@ -70,7 +70,7 @@ export default function OrderDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-zinc-200">
       <Navbar />
 
       <Header
@@ -80,7 +80,7 @@ export default function OrderDetail() {
       />
 
       <div className="p-4 space-y-4">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div className="bg-zinc-100 rounded-lg shadow-sm border border-gray-200 p-4">
           <h3 className="font-medium text-gray-900 mb-2">
             Customer Information
           </h3>
@@ -90,7 +90,7 @@ export default function OrderDetail() {
           </p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div className="bg-zinc-100 rounded-lg shadow-sm border border-gray-200 p-4">
           <h3 className="font-medium text-gray-900 mb-4">Order Items</h3>
           <div className="space-y-3">
             {order.items.map((item) => (
@@ -131,7 +131,7 @@ export default function OrderDetail() {
         </div>
 
         {order.status === "issues" && (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <div className="bg-zinc-100 rounded-lg shadow-sm border border-gray-200 p-4">
             <Button
               onClick={() => navigate(`/delivery/response/${order.id}`)}
               className="w-full"

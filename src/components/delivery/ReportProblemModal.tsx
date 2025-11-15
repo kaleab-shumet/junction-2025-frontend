@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Modal from "../shared/Modal";
 import Button from "../shared/Button";
 import { useAppContext } from "../../context/AppContext";
-import Navbar from "../shared/Navbar";
 
 interface ReportProblemModalProps {
   isOpen: boolean;
@@ -109,7 +108,7 @@ export default function ReportProblemModal({
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={3}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-gray-300  rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Provide additional details..."
           />
         </div>

@@ -10,6 +10,7 @@ const Navbar = () => {
         items={[
           { label: "Home", href: "/home" },
           { label: "Driver", href: "/delivery" },
+          { label: "Demo", href: "/demo" },
         ]}
         activeHref="/home"
         className=""

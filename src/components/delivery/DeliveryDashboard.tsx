@@ -128,9 +128,10 @@ export default function DeliveryDashboard() {
           variant="delivery"
         />
         {/* Stats Overview */}
+
         <div className="p-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-white/20 shadow-xl">
+            <div className="bg-zinc-200 backdrop-blur-sm rounded-2xl p-4 border border-white/20 shadow-xl">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">
@@ -158,7 +159,7 @@ export default function DeliveryDashboard() {
               </div>
             </div>
 
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-white/20 shadow-xl">
+            <div className="bg-zinc-200 backdrop-blur-sm rounded-2xl p-4 border border-white/20 shadow-xl">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Pending</p>
@@ -184,7 +185,7 @@ export default function DeliveryDashboard() {
               </div>
             </div>
 
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-white/20 shadow-xl">
+            <div className="bg-zinc-200 backdrop-blur-sm rounded-2xl p-4 border border-white/20 shadow-xl">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">
@@ -212,7 +213,7 @@ export default function DeliveryDashboard() {
               </div>
             </div>
 
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-white/20 shadow-xl">
+            <div className="bg-zinc-200 backdrop-blur-sm rounded-2xl p-4 border border-white/20 shadow-xl">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Issues</p>
@@ -247,7 +248,7 @@ export default function DeliveryDashboard() {
             {orders.map((order) => (
               <div
                 key={order.id}
-                className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 overflow-hidden hover:shadow-2xl transition-all duration-300"
+                className="bg-zinc-200 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 overflow-hidden hover:shadow-2xl transition-all duration-300"
               >
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-4">
@@ -273,7 +274,7 @@ export default function DeliveryDashboard() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between ">
                     <div className="flex items-center gap-6 text-sm text-gray-600">
                       <div className="flex items-center gap-2">
                         <svg

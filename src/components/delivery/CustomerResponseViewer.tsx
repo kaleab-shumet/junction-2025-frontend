@@ -39,7 +39,7 @@ export default function CustomerResponseViewer() {
 
   if (!response || !order) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-zinc-200">
         <Navbar />
 
         <Header
@@ -62,7 +62,7 @@ export default function CustomerResponseViewer() {
     : null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-zinc-200">
       <Navbar />
 
       <Header

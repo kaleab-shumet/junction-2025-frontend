@@ -4,7 +4,7 @@ import HeaderCard from "../shared/HeaderCard";
 
 const Services = () => {
   return (
-    <div className="w-full min-h-fit py-[10dvh] md:h-[8dvh] p-res-tb bg-black/10 backdrop-blur-3xl flex items-center justify-center flex-col gap-6 md:gap-24">
+    <div className="w-full min-h-fit py-[10dvh] md:h-[8dvh] p-res-tb bg-zinc-400 text-zinc-800 flex items-center justify-center flex-col gap-6 md:gap-24">
       <div className="flex flex-col items-center justify-center gap-4 md:gap-8">
         <HeaderCard
           title="Our Services"
@@ -14,7 +14,7 @@ const Services = () => {
           hoverTextColor="#060010"
         />
 
-        <h2 className="project-body-text p-res-lr p-res-tb text-center w-3/4 font-base">
+        <h2 className="project-body-text p-res-lr p-res-tb text-center w-3/4 font-medium">
           We streamline communication between drivers and customers, ensuring
           every order moves with clarity. No delays. No uncertainty. Just
           direct, real-time updates that keep both sides in sync.

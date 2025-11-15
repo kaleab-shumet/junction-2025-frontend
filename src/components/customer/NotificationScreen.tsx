@@ -154,7 +154,7 @@ export default function NotificationScreen() {
         </div>
 
         {/* Order Info */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6">
+        <div className="bg-zinc-200 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl flex items-center justify-center text-white font-bold text-lg">
               #{order.id}
@@ -180,7 +180,7 @@ export default function NotificationScreen() {
             return (
               <div
                 key={issue.id}
-                className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 overflow-hidden"
+                className="bg-zinc-200 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 overflow-hidden"
               >
                 <div className="p-6">
                   <div className="flex items-start gap-4">
