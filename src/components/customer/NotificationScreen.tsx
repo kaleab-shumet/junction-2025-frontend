@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import Header from '../shared/Header';
-import Button from '../shared/Button';
-import { useAppContext } from '../../context/AppContext';
-import type { Issue, Order } from '../../types';
-import { mockOrders } from '../../data/mockData';
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import Header from "../shared/Header";
+import Button from "../shared/Button";
+import { useAppContext } from "../../context/AppContext";
+import type { Issue, Order } from "../../types";
+import { mockOrders } from "../../data/mockData";
+import Navbar from "../shared/Navbar";
 
 export default function NotificationScreen() {
   const { orderId } = useParams<{ orderId: string }>();
@@ -17,8 +18,8 @@ export default function NotificationScreen() {
     if (orderId) {
       // Get issues from context (real-time)
       const orderIssues = getOrderIssues(orderId);
-      const foundOrder = mockOrders.find(o => o.id === orderId);
-      
+      const foundOrder = mockOrders.find((o) => o.id === orderId);
+
       setIssues(orderIssues);
       setOrder(foundOrder || null);
     }
@@ -26,35 +27,77 @@ export default function NotificationScreen() {
 
   const getIssueIcon = (type: string) => {
     switch (type) {
-      case 'out-of-stock':
+      case "out-of-stock":
         return (
-          <svg className="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+          <svg
+            className="w-6 h-6 text-red-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M20 12H4"
+            />
           </svg>
         );
-      case 'damaged':
+      case "damaged":
         return (
-          <svg className="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          <svg
+            className="w-6 h-6 text-orange-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+            />
           </svg>
         );
-      case 'expired':
+      case "expired":
         return (
-          <svg className="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            className="w-6 h-6 text-yellow-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
         );
       default:
         return (
-          <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            className="w-6 h-6 text-gray-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
         );
     }
   };
 
   const getItemName = (itemId: string) => {
-    return order?.items.find(item => item.id === itemId)?.name || 'Unknown Item';
+    return (
+      order?.items.find((item) => item.id === itemId)?.name || "Unknown Item"
+    );
   };
 
   if (!order || issues.length === 0) {
@@ -62,7 +105,9 @@ export default function NotificationScreen() {
       <div className="min-h-screen bg-gray-50">
         <Header title="Order Update" />
         <div className="p-4">
-          <div className="text-center text-gray-500">No issues found for this order</div>
+          <div className="text-center text-gray-500">
+            No issues found for this order
+          </div>
         </div>
       </div>
     );
@@ -70,28 +115,39 @@ export default function NotificationScreen() {
 
   return (
     <div className="min-h-screen">
-      <Header 
-        title="Order Update" 
+      <Navbar />
+
+      <Header
+        title="Order Update"
         subtitle={`We need your attention for order #${order.id}`}
         variant="customer"
         notificationCount={issues.length}
       />
-      
+
       <div className="p-6 space-y-6">
         {/* Alert Banner */}
         <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-2xl shadow-xl p-6">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                />
               </svg>
             </div>
             <div>
-              <h2 className="text-xl font-bold mb-1">
-                Action Required
-              </h2>
+              <h2 className="text-xl font-bold mb-1">Action Required</h2>
               <p className="text-white/90">
-                We found some issues with items in your order and need your decision
+                We found some issues with items in your order and need your
+                decision
               </p>
             </div>
           </div>
@@ -104,54 +160,96 @@ export default function NotificationScreen() {
               #{order.id}
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-gray-900">{order.customerName}</h3>
-              <p className="text-gray-600">Order placed on {new Date(order.createdAt).toLocaleDateString()}</p>
+              <h3 className="text-xl font-semibold text-gray-900">
+                {order.customerName}
+              </h3>
+              <p className="text-gray-600">
+                Order placed on {new Date(order.createdAt).toLocaleDateString()}
+              </p>
             </div>
           </div>
         </div>
 
         {/* Issues List */}
         <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-gray-900">Items Requiring Your Attention</h3>
+          <h3 className="text-xl font-semibold text-gray-900">
+            Items Requiring Your Attention
+          </h3>
           {issues.map((issue) => {
             const itemName = getItemName(issue.itemId);
             return (
-              <div key={issue.id} className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+              <div
+                key={issue.id}
+                className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 overflow-hidden"
+              >
                 <div className="p-6">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl flex items-center justify-center text-white">
                       {getIssueIcon(issue.type)}
                     </div>
                     <div className="flex-1">
-                      <h4 className="text-lg font-semibold text-gray-900 mb-2">{itemName}</h4>
+                      <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                        {itemName}
+                      </h4>
                       <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
                         <p className="text-red-800 text-sm font-medium">
-                          {issue.message || `This item is ${issue.type.replace('-', ' ')}`}
+                          {issue.message ||
+                            `This item is ${issue.type.replace("-", " ")}`}
                         </p>
                       </div>
-                      
-                      <p className="text-gray-600 mb-4">What would you like us to do?</p>
-                      
+
+                      <p className="text-gray-600 mb-4">
+                        What would you like us to do?
+                      </p>
+
                       <div className="flex flex-col sm:flex-row gap-3">
                         <Button
-                          onClick={() => navigate(`/customer/alternatives/${order.id}/${issue.itemId}`)}
+                          onClick={() =>
+                            navigate(
+                              `/customer/alternatives/${order.id}/${issue.itemId}`
+                            )
+                          }
                           variant="success"
                           className="flex-1"
                           icon={
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                            <svg
+                              className="w-5 h-5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                              />
                             </svg>
                           }
                         >
                           Find Replacement
                         </Button>
                         <Button
-                          onClick={() => navigate(`/customer/confirmation/${order.id}?action=remove&itemId=${issue.itemId}`)}
+                          onClick={() =>
+                            navigate(
+                              `/customer/confirmation/${order.id}?action=remove&itemId=${issue.itemId}`
+                            )
+                          }
                           variant="secondary"
                           className="flex-1"
                           icon={
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            <svg
+                              className="w-5 h-5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              />
                             </svg>
                           }
                         >
@@ -169,14 +267,25 @@ export default function NotificationScreen() {
         {/* Help Section */}
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-6">
           <div className="flex items-center gap-3 mb-3">
-            <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg
+              className="w-6 h-6 text-blue-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
             <h4 className="font-semibold text-blue-900">Need Help?</h4>
           </div>
           <p className="text-blue-800 text-sm">
-            If you have questions about these items or need assistance, please contact our support team. 
-            We're here to help make sure you get exactly what you need.
+            If you have questions about these items or need assistance, please
+            contact our support team. We're here to help make sure you get
+            exactly what you need.
           </p>
         </div>
       </div>
