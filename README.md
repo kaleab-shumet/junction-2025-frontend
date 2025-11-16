@@ -533,3 +533,15 @@ cancelled ←──────────────────────�
 This application was developed for Junction 2025 hackathon, demonstrating modern React patterns, professional UI design, and real-world API integration for order management systems.
 
 For questions or support, please refer to the codebase comments and component documentation.
+
+## 🔧 Additional Backend (LLM-Powered Recommendation Engine)
+This repository contains the backend engine developed during the hackathon,  
+including:  
+- FastAPI backend
+- Gemini recommendation logic
+- CI/CD
+- Docker & Render deployment
+- API documentation
+
+Backend Repository:  
+https://github.com/JY1Z/Junction-Hacakathon-Project-Backend
