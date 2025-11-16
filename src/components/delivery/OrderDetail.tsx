@@ -62,7 +62,8 @@ export default function OrderDetail() {
     // Map customer IDs to their phone numbers
     const phoneMap: Record<string, string> = {
       'user_kaleab': '+358403640854',
-      'user_fahim': '+358415714761'
+      'user_fahim': '+358415714761',
+      'user_sarah': '+358501234567'
     };
     return phoneMap[customerId] || '+358403640854'; // default fallback
   };

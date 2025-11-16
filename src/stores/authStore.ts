@@ -31,6 +31,13 @@ const mockUsers = [
     email: 'fahimorko4122@gmail.com', 
     password: 'admin123' 
   },
+  { 
+    id: 'user_sarah', 
+    name: 'Sarah Martinez', 
+    phone: '+358501234567',
+    email: 'sarah.martinez@email.com', 
+    password: 'admin123' 
+  },
 ];
 
 export const useAuthStore = create<AuthState>()(
