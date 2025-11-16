@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Modal from '../shared/Modal';
 import Button from '../shared/Button';
-import { useAppContext } from '../../context/AppContext';
+import { useOrderStore } from '../../stores/orderStore';
+import { useNotificationStore } from '../../stores/notificationStore';
 
 interface ReportProblemModalProps {
   isOpen: boolean;
@@ -22,8 +22,8 @@ export default function ReportProblemModal({
   const [issueType, setIssueType] = useState('');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { reportIssue } = useAppContext();
-  const navigate = useNavigate();
+  const { addPendingIssue } = useOrderStore();
+  const { addNotification } = useNotificationStore();
 
   const issueTypes = [
     { value: 'out-of-stock', label: 'Out of Stock' },
@@ -37,30 +37,31 @@ export default function ReportProblemModal({
     
     setIsSubmitting(true);
     try {
-      // Report the issue using context
-      reportIssue({
-        orderId,
+      // Add to pending issues (don't send to customer yet)
+      addPendingIssue(orderId, {
         itemId,
         type: issueType as 'out-of-stock' | 'damaged' | 'expired' | 'other',
         message: message || `${itemName} is ${issueType.replace('-', ' ')}`
       });
 
-      // Show success notification
-      alert(`Issue reported successfully! Customer will be notified about the ${issueType.replace('-', ' ')} ${itemName}.`);
+      // Show notification that issue was added to pending
+      addNotification({
+        title: 'Issue Added',
+        message: `${issueType.replace('-', ' ')} issue with ${itemName} added to pending issues.`,
+        type: 'success'
+      });
       
       // Reset form
       setIssueType('');
       setMessage('');
       onClose();
-      
-      // Optionally show a notification that customer can now see this
-      setTimeout(() => {
-        if (confirm('Would you like to see how the customer will be notified? Click OK to switch to customer view.')) {
-          navigate(`/customer/notifications/${orderId}`);
-        }
-      }, 1000);
     } catch (error) {
-      console.error('Failed to report issue:', error);
+      console.error('Failed to add pending issue:', error);
+      addNotification({
+        title: 'Error Adding Issue',
+        message: 'Failed to add the issue. Please try again.',
+        type: 'error'
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -109,7 +110,7 @@ export default function ReportProblemModal({
             onClick={handleSubmit}
             disabled={!issueType || isSubmitting}
           >
-            {isSubmitting ? 'Sending...' : 'Send to Customer'}
+            {isSubmitting ? 'Adding...' : 'Add Issue'}
           </Button>
           <Button
             onClick={onClose}

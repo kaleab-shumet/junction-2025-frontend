@@ -6,6 +6,7 @@ interface ButtonProps {
   disabled?: boolean;
   className?: string;
   icon?: React.ReactNode;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 export default function Button({ 
@@ -15,7 +16,8 @@ export default function Button({
   size = 'md',
   disabled = false,
   className = '',
-  icon
+  icon,
+  type = 'button'
 }: ButtonProps) {
   const baseClasses = 'font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-offset-2 transform active:scale-95 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl';
   
@@ -36,6 +38,7 @@ export default function Button({
   
   return (
     <button
+      type={type}
       onClick={disabled ? undefined : onClick}
       className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${disabledClasses} ${className}`}
     >

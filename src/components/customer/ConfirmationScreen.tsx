@@ -2,15 +2,17 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import Header from '../shared/Header';
 import Button from '../shared/Button';
-import { useAppContext } from '../../context/AppContext';
+import { useOrderStore } from '../../stores/orderStore';
+import { useNotificationStore } from '../../stores/notificationStore';
 import type { Order } from '../../types';
-import { mockOrders, mockAlternatives } from '../../data/mockData';
+import { mockAlternatives } from '../../data/mockData';
 
 export default function ConfirmationScreen() {
   const { orderId } = useParams<{ orderId: string }>();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { submitCustomerResponse } = useAppContext();
+  const { submitCustomerResponse, orders } = useOrderStore();
+  const { addNotification } = useNotificationStore();
   const [order, setOrder] = useState<Order | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -19,11 +21,11 @@ export default function ConfirmationScreen() {
   const replacementId = searchParams.get('replacementId');
 
   useEffect(() => {
-    // Placeholder API call
+    // Get order from store
     const fetchOrder = async () => {
       try {
         // await fetch(`/api/orders/${orderId}`);
-        const foundOrder = mockOrders.find(o => o.id === orderId);
+        const foundOrder = orders.find(o => o.id === orderId);
         setOrder(foundOrder || null);
       } catch (error) {
         console.error('Failed to fetch order:', error);
@@ -33,14 +35,14 @@ export default function ConfirmationScreen() {
     if (orderId) {
       fetchOrder();
     }
-  }, [orderId]);
+  }, [orderId, orders]);
 
   const handleSendToDelivery = async () => {
     if (!orderId || !itemId || !action) return;
     
     setIsSubmitting(true);
     try {
-      // Submit customer response through context
+      // Submit customer response through Zustand store
       submitCustomerResponse({
         orderId,
         itemId,
@@ -48,17 +50,17 @@ export default function ConfirmationScreen() {
         replacementId: replacementId || undefined
       });
       
-      // Show success message
-      alert('Your decision has been sent to the delivery team! They will update your order accordingly.');
+      // Show professional notification
+      addNotification({
+        title: 'Decision Submitted Successfully',
+        message: 'Your decision has been sent to the delivery team. They will update your order accordingly.',
+        type: 'success'
+      });
       
-      // Offer to show delivery team's view
+      // Auto-navigate to customer dashboard after a brief delay
       setTimeout(() => {
-        if (confirm('Would you like to see how the delivery team will view your response? Click OK to switch to delivery view.')) {
-          navigate(`/delivery/response/${orderId}`);
-        } else {
-          navigate('/delivery');
-        }
-      }, 1000);
+        navigate('/customer');
+      }, 2000);
     } catch (error) {
       console.error('Failed to send decision:', error);
     } finally {

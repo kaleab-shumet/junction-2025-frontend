@@ -1,7 +1,8 @@
 export interface Order {
   id: string;
+  customerId: string;
   customerName: string;
-  status: 'pending' | 'in-progress' | 'completed' | 'issues';
+  status: 'pending' | 'issues' | 'completed' | 'cancelled';
   items: OrderItem[];
   createdAt: string;
 }

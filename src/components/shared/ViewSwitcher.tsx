@@ -1,23 +1,29 @@
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuthStore } from '../../stores/authStore';
 import Button from './Button';
 
 export default function ViewSwitcher() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated } = useAuthStore();
   
   const isDeliveryView = location.pathname.startsWith('/delivery');
   const isCustomerView = location.pathname.startsWith('/customer');
+  const isAuthView = location.pathname.startsWith('/login');
 
   const switchToDelivery = () => {
     navigate('/delivery');
   };
 
   const switchToCustomer = () => {
-    // Navigate to a sample customer notification for demo purposes
-    navigate('/customer/notifications/1001');
+    if (isAuthenticated) {
+      navigate('/customer');
+    } else {
+      navigate('/login');
+    }
   };
 
-  if (!isDeliveryView && !isCustomerView) {
+  if (!isDeliveryView && !isCustomerView && !isAuthView) {
     return null;
   }
 

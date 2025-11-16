@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../shared/Header';
 import Button from '../shared/Button';
+import { useOrderStore } from '../../stores/orderStore';
 import type { Alternative, Order } from '../../types';
-import { mockAlternatives, mockOrders } from '../../data/mockData';
+import { mockAlternatives } from '../../data/mockData';
 
 export default function AlternativeSelection() {
   const { orderId, itemId } = useParams<{ orderId: string; itemId: string }>();
   const navigate = useNavigate();
+  const { orders } = useOrderStore();
   const [alternatives, setAlternatives] = useState<Alternative[]>([]);
   const [filteredAlternatives, setFilteredAlternatives] = useState<Alternative[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -15,11 +17,11 @@ export default function AlternativeSelection() {
   const [order, setOrder] = useState<Order | null>(null);
 
   useEffect(() => {
-    // Placeholder API call
+    // Load alternatives and order data
     const fetchAlternatives = async () => {
       try {
         // await fetch(`/api/alternatives?itemId=${itemId}`);
-        const foundOrder = mockOrders.find(o => o.id === orderId);
+        const foundOrder = orders.find(o => o.id === orderId);
         setOrder(foundOrder || null);
         setAlternatives(mockAlternatives);
         setFilteredAlternatives(mockAlternatives);
@@ -31,7 +33,7 @@ export default function AlternativeSelection() {
     if (orderId && itemId) {
       fetchAlternatives();
     }
-  }, [orderId, itemId]);
+  }, [orderId, itemId, orders]);
 
   useEffect(() => {
     if (searchQuery.trim() === '') {

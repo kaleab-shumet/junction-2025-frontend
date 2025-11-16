@@ -2,27 +2,28 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../shared/Header';
 import Button from '../shared/Button';
-import { useAppContext } from '../../context/AppContext';
+import { useOrderStore } from '../../stores/orderStore';
+import { useNotificationStore } from '../../stores/notificationStore';
 import type { Issue, Order } from '../../types';
-import { mockOrders } from '../../data/mockData';
 
 export default function NotificationScreen() {
   const { orderId } = useParams<{ orderId: string }>();
   const navigate = useNavigate();
-  const { getOrderIssues } = useAppContext();
+  const { getIssuesByOrder, orders, cancelOrder } = useOrderStore();
+  const { addNotification } = useNotificationStore();
   const [order, setOrder] = useState<Order | null>(null);
   const [issues, setIssues] = useState<Issue[]>([]);
 
   useEffect(() => {
     if (orderId) {
-      // Get issues from context (real-time)
-      const orderIssues = getOrderIssues(orderId);
-      const foundOrder = mockOrders.find(o => o.id === orderId);
+      // Get issues from Zustand store (real-time)
+      const orderIssues = getIssuesByOrder(orderId);
+      const foundOrder = orders.find(o => o.id === orderId);
       
       setIssues(orderIssues);
       setOrder(foundOrder || null);
     }
-  }, [orderId, getOrderIssues]);
+  }, [orderId, getIssuesByOrder, orders]);
 
   const getIssueIcon = (type: string) => {
     switch (type) {
@@ -53,8 +54,21 @@ export default function NotificationScreen() {
     }
   };
 
-  const getItemName = (itemId: string) => {
-    return order?.items.find(item => item.id === itemId)?.name || 'Unknown Item';
+
+  const handleCancelOrder = () => {
+    if (!orderId) return;
+    
+    cancelOrder(orderId);
+    addNotification({
+      title: 'Order Cancelled',
+      message: `Order #${orderId} has been cancelled successfully.`,
+      type: 'success'
+    });
+    navigate('/customer');
+  };
+
+  const hasIssue = (itemId: string) => {
+    return issues.some(issue => issue.itemId === itemId);
   };
 
   if (!order || issues.length === 0) {
@@ -110,60 +124,116 @@ export default function NotificationScreen() {
           </div>
         </div>
 
-        {/* Issues List */}
+        {/* Order Items with Issue Highlights */}
         <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-gray-900">Items Requiring Your Attention</h3>
-          {issues.map((issue) => {
-            const itemName = getItemName(issue.itemId);
+          <h3 className="text-xl font-semibold text-gray-900">Your Order Items</h3>
+          
+          {order.items.map((item) => {
+            const itemHasIssue = hasIssue(item.id);
+            const itemIssue = issues.find(issue => issue.itemId === item.id);
+            
             return (
-              <div key={issue.id} className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+              <div 
+                key={item.id} 
+                className={`bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border overflow-hidden ${
+                  itemHasIssue 
+                    ? 'border-red-300 ring-2 ring-red-100' 
+                    : 'border-white/20'
+                }`}
+              >
                 <div className="p-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl flex items-center justify-center text-white">
-                      {getIssueIcon(issue.type)}
-                    </div>
+                    {itemHasIssue && (
+                      <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl flex items-center justify-center text-white flex-shrink-0">
+                        {getIssueIcon(itemIssue?.type || 'other')}
+                      </div>
+                    )}
                     <div className="flex-1">
-                      <h4 className="text-lg font-semibold text-gray-900 mb-2">{itemName}</h4>
-                      <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-                        <p className="text-red-800 text-sm font-medium">
-                          {issue.message || `This item is ${issue.type.replace('-', ' ')}`}
-                        </p>
+                      <div className="flex items-start justify-between mb-2">
+                        <h4 className="text-lg font-semibold text-gray-900">{item.name}</h4>
+                        {!itemHasIssue && (
+                          <span className="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+                            ✓ Available
+                          </span>
+                        )}
                       </div>
                       
-                      <p className="text-gray-600 mb-4">What would you like us to do?</p>
-                      
-                      <div className="flex flex-col sm:flex-row gap-3">
-                        <Button
-                          onClick={() => navigate(`/customer/alternatives/${order.id}/${issue.itemId}`)}
-                          variant="success"
-                          className="flex-1"
-                          icon={
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                            </svg>
-                          }
-                        >
-                          Find Replacement
-                        </Button>
-                        <Button
-                          onClick={() => navigate(`/customer/confirmation/${order.id}?action=remove&itemId=${issue.itemId}`)}
-                          variant="secondary"
-                          className="flex-1"
-                          icon={
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                          }
-                        >
-                          Remove from Order
-                        </Button>
+                      <div className="flex items-center gap-4 mb-3">
+                        <span className="text-sm text-gray-600">Qty: {item.quantity}</span>
+                        <span className="text-sm text-gray-600">${item.originalPrice.toFixed(2)} each</span>
+                        <span className="text-sm font-medium text-gray-900">
+                          ${(item.originalPrice * item.quantity).toFixed(2)}
+                        </span>
                       </div>
+
+                      {itemHasIssue && itemIssue && (
+                        <>
+                          <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-red-800 font-medium">⚠️ Issue:</span>
+                              <span className="text-red-700 text-sm">{itemIssue.type.replace('-', ' ')}</span>
+                            </div>
+                            <p className="text-red-800 text-sm">
+                              {itemIssue.message || `This item is ${itemIssue.type.replace('-', ' ')}`}
+                            </p>
+                          </div>
+                          
+                          <p className="text-gray-600 mb-4">What would you like us to do with this item?</p>
+                          
+                          <div className="flex flex-col sm:flex-row gap-3">
+                            <Button
+                              onClick={() => navigate(`/customer/alternatives/${order.id}/${itemIssue.itemId}`)}
+                              variant="success"
+                              className="flex-1"
+                              icon={
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                </svg>
+                              }
+                            >
+                              Find Replacement
+                            </Button>
+                            <Button
+                              onClick={() => navigate(`/customer/confirmation/${order.id}?action=remove&itemId=${itemIssue.itemId}`)}
+                              variant="secondary"
+                              className="flex-1"
+                              icon={
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                              }
+                            >
+                              Remove from Order
+                            </Button>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
             );
           })}
+        </div>
+
+        {/* Cancel Order Option */}
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Order Options</h3>
+          <p className="text-gray-600 text-sm mb-4">
+            If you're not satisfied with the available alternatives, you can cancel the entire order for a full refund.
+          </p>
+          <Button
+            onClick={handleCancelOrder}
+            variant="danger"
+            size="sm"
+            icon={
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            }
+          >
+            Cancel Entire Order
+          </Button>
         </div>
 
         {/* Help Section */}

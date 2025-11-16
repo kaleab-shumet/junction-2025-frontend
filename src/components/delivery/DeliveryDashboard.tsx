@@ -1,32 +1,17 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../shared/Header';
 import Button from '../shared/Button';
+import { useOrderStore } from '../../stores/orderStore';
 import type { Order } from '../../types';
-import { mockOrders } from '../../data/mockData';
 
 export default function DeliveryDashboard() {
-  const [orders, setOrders] = useState<Order[]>([]);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Placeholder API call
-    const fetchOrders = async () => {
-      try {
-        // await fetch('/api/orders');
-        setOrders(mockOrders);
-      } catch (error) {
-        console.error('Failed to fetch orders:', error);
-      }
-    };
-
-    fetchOrders();
-  }, []);
+  const { orders } = useOrderStore();
 
   const getStatusColor = (status: Order['status']) => {
     switch (status) {
       case 'pending': return 'bg-gradient-to-r from-yellow-400 to-orange-400 text-white';
-      case 'in-progress': return 'bg-gradient-to-r from-blue-500 to-purple-500 text-white';
+      case 'cancelled': return 'bg-gradient-to-r from-gray-500 to-slate-500 text-white';
       case 'completed': return 'bg-gradient-to-r from-green-500 to-emerald-500 text-white';
       case 'issues': return 'bg-gradient-to-r from-red-500 to-pink-500 text-white';
       default: return 'bg-gradient-to-r from-gray-500 to-slate-500 text-white';
@@ -40,9 +25,9 @@ export default function DeliveryDashboard() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       );
-      case 'in-progress': return (
+      case 'cancelled': return (
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
         </svg>
       );
       case 'completed': return (
@@ -62,7 +47,7 @@ export default function DeliveryDashboard() {
   const stats = {
     total: orders.length,
     pending: orders.filter(o => o.status === 'pending').length,
-    inProgress: orders.filter(o => o.status === 'in-progress').length,
+    cancelled: orders.filter(o => o.status === 'cancelled').length,
     issues: orders.filter(o => o.status === 'issues').length,
     completed: orders.filter(o => o.status === 'completed').length
   };
@@ -109,12 +94,12 @@ export default function DeliveryDashboard() {
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-white/20 shadow-xl">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">In Progress</p>
-                <p className="text-2xl font-bold text-blue-600">{stats.inProgress}</p>
+                <p className="text-sm font-medium text-gray-600">Cancelled</p>
+                <p className="text-2xl font-bold text-gray-600">{stats.cancelled}</p>
               </div>
-              <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl">
+              <div className="p-3 bg-gradient-to-r from-gray-500 to-slate-500 rounded-xl">
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </div>
             </div>
